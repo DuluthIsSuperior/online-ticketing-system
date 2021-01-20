@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import LoginService from '../../services/LoginService';
-import UserDashboardService from '../../services/user-dashboard/UserDashboardService';
+import TicketService from '../../services/ticket/TicketService';
 
 class UserDashboardComponent extends Component {
   constructor(props) {
@@ -11,6 +11,7 @@ class UserDashboardComponent extends Component {
       tickets: []
     }
     this.addTicketClicked = this.addTicketClicked.bind(this);
+    console.log(props);
   }
 
   componentDidMount() {
@@ -21,7 +22,7 @@ class UserDashboardComponent extends Component {
           this.props.history.push("/");
         } else {
           this.setState({header: `Welcome ${this.state.loggedIn}!`});
-          UserDashboardService.getTickets().then(response => {
+          TicketService.getTickets().then(response => {
             this.setState({
               tickets: response.data
             })

@@ -11,7 +11,7 @@ public class Ticket {
     private int id;
 
     @Column(name = "user_id", nullable = false)
-    private int user_id;
+    private String user_id;
 
     @Column(name = "issue", length = 100, nullable = false)
     private String issue;
@@ -33,11 +33,11 @@ public class Ticket {
         this.id = id;
     }
 
-    public int getUser_id() {
+    public String getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(int user_id) {
+    public void setUser_id(String user_id) {
         this.user_id = user_id;
     }
 
@@ -71,5 +71,11 @@ public class Ticket {
 
     public void setClosed(boolean closed) {
         this.closed = closed;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Ticket #%d - user: %s - issue: %s - description: %s\n\t%s - %s", id, user_id, issue, description,
+                resolved ? "RESOLVED" : "UNRESOLVED", closed ? "CLOSED" : "OPEN");
     }
 }

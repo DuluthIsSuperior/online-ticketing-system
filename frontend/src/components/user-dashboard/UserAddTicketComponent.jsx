@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import LoginService from '../../services/LoginService';
+import TicketService from '../../services/ticket/TicketService';
 
 class UserAddTicketComponent extends Component {
   constructor(props) {
@@ -34,6 +35,18 @@ class UserAddTicketComponent extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    let ticket = {
+      issue: this.state.issue,
+      description: this.state.description
+    };
+    TicketService.addTicket(ticket).then(response => {
+      if (response.data) {
+        this.setState({
+          status: "OK"
+        });
+        this.props.history.push("/UserDashboard", this.state);
+      }
+    });
   }
 
   render() {
