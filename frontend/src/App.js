@@ -10,7 +10,7 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/" component={HomeComponent}/>
-          <Route path="/UserDashboard" component={UserDashboardComponent}/>
+          <Route exact path="/UserDashboard" component={UserDashboardComponent}/>
           <Route path="/UserDashboard/add" component={UserAddTicketComponent}/>
         </Switch>
       </Router>

@@ -9,6 +9,7 @@ public class LogInController {
 
     @GetMapping("/kick")
     public boolean kick() {
+        System.out.print(userLoggedIn == null ? "" : ("User " + userLoggedIn + " has been logged out"));
         userLoggedIn = null;
         return true;
     }

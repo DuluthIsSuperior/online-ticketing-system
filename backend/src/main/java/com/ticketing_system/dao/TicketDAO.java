@@ -37,12 +37,20 @@ public class TicketDAO implements MyDAO<Ticket> {
     }
 
     @Override
-    public Ticket update(Ticket object) {
-        return null;
+    public Ticket update(Ticket ticket) {
+        try {
+            getSession().saveOrUpdate(ticket);
+            return ticket;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
-    public Ticket save(Ticket object) {
+    public Ticket save(Ticket ticket) {
+        ticket.setId(0);    // denotes that this ticket is being added
+        update(ticket);
         return null;
     }
 

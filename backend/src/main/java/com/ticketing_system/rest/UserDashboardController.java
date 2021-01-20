@@ -4,9 +4,7 @@ import com.ticketing_system.dao.TicketDAO;
 import com.ticketing_system.entity.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,7 +30,24 @@ public class UserDashboardController {
             return null;
         } else {
             System.out.println("Granted");
-            return ticketDAO.findByUserID(logInController.currentlyLoggedIn());
+            return ticketDAO.findByUserID(loggedIn);
+        }
+    }
+
+    @PostMapping("/UserDashboard/addTicket")
+    public Ticket addTicket(@RequestBody Ticket ticket) {
+        System.out.print("Request to add ticket... ");
+        String currentlyLoggedIn = logInController.currentlyLoggedIn();
+        if (currentlyLoggedIn == null) {
+            System.out.println("Denied, no one is logged in");
+            return null;
+        } else {
+            Ticket response = ticketDAO.update(ticket);
+            if (response == null) {
+                System.out.println("Error");
+            }
+            System.out.println("Granted");
+            return response;
         }
     }
 }
