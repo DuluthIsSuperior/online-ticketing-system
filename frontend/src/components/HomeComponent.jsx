@@ -1,51 +1,63 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import LoginService from '../services/LoginService';
 
-class HomeComponent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      user_id: '',
-      message: ''
-    };
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    LoginService.kick();
-  }
+const HomeComponent = (props) => {
+  const [constructorHasRun, setConstructorHasRun] = useState(false);
+  const [state, setState] = useState({
+    user_id: '',
+    message: 'Connecting...'
+  });
+  
+  const constructor = () => {
+    if (constructorHasRun) return;
+    LoginService.kick().then(response => {
+      setState({
+        message: ''
+      });
+      document.getElementById('userID').disabled = false;
+      document.getElementById('userSubmit').disabled = false;
+    }).catch(exception => {
+      setState({
+        message: 'There was an error connecting to the service'
+      });
+    });
+    setConstructorHasRun(true);
+  };
+  constructor();
 
-  handleSubmit(event) {
+  const handleSubmit = (event) => {
     event.preventDefault(); // prevents the form from doing its normal behavior when submitted
-    LoginService.login(this.state.user_id).then(response => {
+    LoginService.login(state.user_id).then(response => {
       if (response.data) {
-        this.props.history.push("/UserDashboard");
+        props.history.push("/UserDashboard");
       } else {
-        this.setState({
+        setState({
           message: 'Error logging in'
         });
       }
+    }).catch(exception => {
+      setState({
+        message: 'There was an error connecting to the service'
+      });
     });
-  }
+  };
 
-  handleChange(event) {
-    this.setState({
+  const handleChange = (event) => {
+    setState({
       user_id: event.target.value
     });
-  }
+  };
 
-  render() {
-    return(
+  return(
       <div className="home">
         User ID:<br/>
-        <form onSubmit={this.handleSubmit}>
-          <input type="text" name="user_id" onChange={this.handleChange}/>
-          <button onClick={this.handleSubmit}>Submit</button><br/>
+        <form onSubmit={handleSubmit}>
+          <input id="userID" type="text" name="user_id" onChange={handleChange} disabled/>
+          <button id="userSubmit" onClick={handleSubmit} disabled>Submit</button><br/>
         </form>
-        {/* 
-         */}
-        {this.state.message}
+        <span>{state.message}</span>
       </div>
-    );
-  }
+  );
 };
 
 export default HomeComponent;
